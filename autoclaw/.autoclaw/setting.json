@@ -1,0 +1,6 @@
+{
+  "apiKey": "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",
+  "baseUrl": "https://api.openai.com/v1",
+  "model": "gpt-4o",
+  "autoConfirm": false
+}

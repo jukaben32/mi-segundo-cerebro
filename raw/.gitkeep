@@ -1,0 +1,4 @@
+# raw/
+# Este directorio contiene las fuentes originales (inmutables).
+# Artículos, PDFs, transcripciones, notas sin procesar.
+# El LLM SOLO LEE aquí, nunca escribe.

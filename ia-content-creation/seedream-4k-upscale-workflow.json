@@ -1,0 +1,1063 @@
+{
+  "name": "Seedream 4.0 Template Skool",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## 🤖 Nano 🍌 / Seedream -> 4k Video\n## | [Created by Chase AI](https://www.skool.com/chase-ai)\n\n## How it Works\n### - Trigger inside Airtable\n### - Grabs first + last frame images for each scene\n### - Images send to Fal.AI for video creation\n### - Scenes uploaded to Airtable, await approval\n### - Once approved, videos are stiched + upscaled\n### - Clips are stitched together via ffmpeg\n### - Final video upscaled via Topaz\n### - Video uploaded to Airtable\n\n## APIs Needed\n### - [Airtable](https://docs.n8n.io/integrations/builtin/credentials/airtable/?utm_source=n8n_app&utm_medium=credential_settings&utm_campaign=create_new_credentials_modal)\n### - Fal.ai\n\n## Resources\n### - [Airtable Template](https://airtable.com/appc6csgkqrLMZWd4/shrpzijGtV9bVoxq6) (Copy the base + update webhook)\n### - [Nano Banana](https://aistudio.google.com/prompts/new_chat) (Free)\n### - [Seed Dream](https://fal.ai/models/fal-ai/bytedance/seedream/v4/edit) ($0.03 / image)\n### - [Minimax](https://fal.ai/models/fal-ai/minimax/hailuo-02/pro/image-to-video) ($0.08 / second)\n### - [FFMPEG](https://fal.ai/models/fal-ai/ffmpeg-api/merge-videos) ($0.0002 / second)\n### - [Topaz](https://fal.ai/models/fal-ai/topaz/upscale/video) ($0.033 / second)\n\n## Cost per 6s 4k Upscaled Video \"Scene\"\n### ~ $0.68 = $0.48 (Video) + $0.20 (Upscale)\n",
+        "height": 880,
+        "width": 512,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1264,
+        -1424
+      ],
+      "id": "45957e23-5880-4cfc-9d37-f95ad8247374",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "amount": 6,
+        "unit": "minutes"
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        -432,
+        -1200
+      ],
+      "id": "f457e06f-b692-4da8-8dda-439a43444273",
+      "name": "Wait",
+      "webhookId": "053777d3-57a9-4d21-839c-47910c8eed21"
+    },
+    {
+      "parameters": {
+        "content": "",
+        "height": 1024,
+        "width": 1200,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -688,
+        -1488
+      ],
+      "id": "fd2c8b4c-6aee-482b-a115-a4a41fc83388",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "appc6csgkqrLMZWd4",
+          "mode": "list",
+          "cachedResultName": "Nano Banana Automation",
+          "cachedResultUrl": "https://airtable.com/appc6csgkqrLMZWd4"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblG0fdNhtUY6osqd",
+          "mode": "list",
+          "cachedResultName": "4k Video",
+          "cachedResultUrl": "https://airtable.com/appc6csgkqrLMZWd4/tblG0fdNhtUY6osqd"
+        },
+        "filterByFormula": "{Status} = \"1080p Standby\"",
+        "options": {
+          "fields": [
+            "First Frame",
+            "Last Frame",
+            "Video Prompt"
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        -224,
+        -1408
+      ],
+      "id": "021f7324-d126-46d8-a802-adecf6b655c1",
+      "name": "Get Create Rows1",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "n1Mt5joq6FoBOBrd",
+          "name": "Token 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://queue.fal.run/fal-ai/minimax/hailuo-02/pro/image-to-video",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n    \"prompt\": \"{{ $json['Video Prompt'] }}\",\n    \"image_url\": \"{{ $json['First Frame'][0].url }}\",\n    \"prompt_optimizer\": true,\n    \"end_image_url\": \"{{ $json['Last Frame'][0].url }}\",\n    \"fal_webhook\": \"{{ $execution.resumeUrl }}\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -32,
+        -1408
+      ],
+      "id": "58bf6280-83e8-4f11-864b-e18b270475bf",
+      "name": "Fal_Video",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "W0esa2eb0Uc5oMIS",
+          "name": "Fal AI"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.response_url }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -240,
+        -1200
+      ],
+      "id": "35caccb9-47a7-4f15-8e45-9ebfeb024f26",
+      "name": "Get Videos",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "W0esa2eb0Uc5oMIS",
+          "name": "Fal AI"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "appc6csgkqrLMZWd4",
+          "mode": "list",
+          "cachedResultName": "Nano Banana Automation",
+          "cachedResultUrl": "https://airtable.com/appc6csgkqrLMZWd4"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblG0fdNhtUY6osqd",
+          "mode": "list",
+          "cachedResultName": "4k Video",
+          "cachedResultUrl": "https://airtable.com/appc6csgkqrLMZWd4/tblG0fdNhtUY6osqd"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $('Get Create Rows1').item.json.id }}",
+            "1080p Video": "={{ $json.video.url }}",
+            "Status": "4k Standby"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "Title",
+              "displayName": "Title",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Scene",
+              "displayName": "Scene",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "First Frame",
+              "displayName": "First Frame",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Last Frame",
+              "displayName": "Last Frame",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Video Prompt",
+              "displayName": "Video Prompt",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "1080p Standby",
+                  "value": "1080p Standby"
+                },
+                {
+                  "name": "4k Standby",
+                  "value": "4k Standby"
+                },
+                {
+                  "name": "Completed",
+                  "value": "Completed"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Create 1080p Video",
+              "displayName": "Create 1080p Video",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "1080p Video",
+              "displayName": "1080p Video",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "4k Video",
+              "displayName": "4k Video",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        -32,
+        -1200
+      ],
+      "id": "a9a5de09-afaa-4e71-9a2d-ead8e51659a9",
+      "name": "Update record",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "n1Mt5joq6FoBOBrd",
+          "name": "Token 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "path": "90d5393b-39f1-4722-9455-2fe74a3dfbd7",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -624,
+        -896
+      ],
+      "id": "4775cfc9-85f2-4597-8edb-500edd8afb7e",
+      "name": "4k Webhook",
+      "webhookId": "90d5393b-39f1-4722-9455-2fe74a3dfbd7"
+    },
+    {
+      "parameters": {
+        "path": "9e84dce4-edd0-426f-83be-69b9ac874b9f",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -464,
+        -1408
+      ],
+      "id": "3d1d4783-8869-4126-8039-9a102d382271",
+      "name": "1080p Webhook",
+      "webhookId": "9e84dce4-edd0-426f-83be-69b9ac874b9f"
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "appc6csgkqrLMZWd4",
+          "mode": "list",
+          "cachedResultName": "Nano Banana Automation",
+          "cachedResultUrl": "https://airtable.com/appc6csgkqrLMZWd4"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblG0fdNhtUY6osqd",
+          "mode": "list",
+          "cachedResultName": "4k Video",
+          "cachedResultUrl": "https://airtable.com/appc6csgkqrLMZWd4/tblG0fdNhtUY6osqd"
+        },
+        "filterByFormula": "{Status} = \"4k Standby\"",
+        "options": {
+          "fields": [
+            "1080p Video",
+            "Title",
+            "Scene"
+          ]
+        },
+        "sort": {
+          "property": [
+            {
+              "field": "Scene"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        -464,
+        -896
+      ],
+      "id": "847dd8d2-a2d2-4276-9485-41201239a820",
+      "name": "Get Create Rows2",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "n1Mt5joq6FoBOBrd",
+          "name": "Token 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fieldsToAggregate": {
+          "fieldToAggregate": [
+            {
+              "fieldToAggregate": "1080p Video",
+              "renameField": true,
+              "outputFieldName": "VideoURLs"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        -272,
+        -896
+      ],
+      "id": "45ca1140-edb8-46d5-a0a4-9437dbf95369",
+      "name": "Aggregate"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://queue.fal.run/fal-ai/ffmpeg-api/merge-videos",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"video_urls\": [{{ $json.VideoURLs.map(url => `\"${url}\"`).join(\", \") }}],\n  \"fal_webhook\": \"{{ $execution.resumeUrl }}\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -128,
+        -896
+      ],
+      "id": "072ce888-02b5-448a-b88c-af80df8b63d0",
+      "name": "Merge Videos",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "W0esa2eb0Uc5oMIS",
+          "name": "Fal AI"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resume": "webhook",
+        "httpMethod": "POST",
+        "limitWaitTime": true,
+        "resumeAmount": 3,
+        "resumeUnit": "minutes",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        32,
+        -896
+      ],
+      "id": "7d57cda0-d740-4bc1-96c0-fc4ef8615c87",
+      "name": "Wait1",
+      "webhookId": "b17ca3f6-8908-441a-9d31-9176c6ad9baf"
+    },
+    {
+      "parameters": {
+        "amount": 60
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        -400,
+        -688
+      ],
+      "id": "0c7e103a-891b-4091-9334-14c16e64f6db",
+      "name": "Wait2",
+      "webhookId": "b99f9fa5-542c-4fe7-ac59-02a7cd88fc15"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://queue.fal.run/fal-ai/topaz/upscale/video",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"video_url\": \"{{ $json.video.url }}\",\n  \"upscale_factor\": 2,\n  \"H264_output\": true,\n  \"target_fps\": \"60\" \n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -592,
+        -688
+      ],
+      "id": "2e9976df-72dd-4d63-9991-1583dc6fd68f",
+      "name": "4K Upscale",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "W0esa2eb0Uc5oMIS",
+          "name": "Fal AI"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "={{ $('4K Upscale').item.json.response_url }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -240,
+        -688
+      ],
+      "id": "fa5b0fd7-3d7f-49db-bf72-5aeff9230419",
+      "name": "HTTP Request",
+      "retryOnFail": false,
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "W0esa2eb0Uc5oMIS",
+          "name": "Fal AI"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "appc6csgkqrLMZWd4",
+          "mode": "list",
+          "cachedResultName": "Nano Banana Automation",
+          "cachedResultUrl": "https://airtable.com/appc6csgkqrLMZWd4"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblG0fdNhtUY6osqd",
+          "mode": "list",
+          "cachedResultName": "4k Video",
+          "cachedResultUrl": "https://airtable.com/appc6csgkqrLMZWd4/tblG0fdNhtUY6osqd"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "4k Video": "={{ $('Switch').item.json.video.url }}",
+            "Status": "Completed",
+            "id": "={{ $json.id }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "Title",
+              "displayName": "Title",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Scene",
+              "displayName": "Scene",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "First Frame",
+              "displayName": "First Frame",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Last Frame",
+              "displayName": "Last Frame",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Video Prompt",
+              "displayName": "Video Prompt",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "1080p Standby",
+                  "value": "1080p Standby"
+                },
+                {
+                  "name": "4k Standby",
+                  "value": "4k Standby"
+                },
+                {
+                  "name": "Completed",
+                  "value": "Completed"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Create 1080p Video",
+              "displayName": "Create 1080p Video",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "1080p Video",
+              "displayName": "1080p Video",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Create 4K Video",
+              "displayName": "Create 4K Video",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "4k Video",
+              "displayName": "4k Video",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        272,
+        -704
+      ],
+      "id": "94307e2d-8375-4348-ab44-07d4ff9fcb65",
+      "name": "Update record1",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "n1Mt5joq6FoBOBrd",
+          "name": "Token 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "# Scene Creation",
+        "height": 480,
+        "width": 896,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -608,
+        -1472
+      ],
+      "id": "294ce96f-19cf-4cf9-b820-f157bbb98a81",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "# Stitch + Upscale",
+        "height": 496,
+        "width": 1152,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -672,
+        -976
+      ],
+      "id": "03edb62c-7a4c-4f8d-8983-50931a4357b3",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "appc6csgkqrLMZWd4",
+          "mode": "list",
+          "cachedResultName": "Nano Banana Automation",
+          "cachedResultUrl": "https://airtable.com/appc6csgkqrLMZWd4"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblG0fdNhtUY6osqd",
+          "mode": "list",
+          "cachedResultName": "4k Video",
+          "cachedResultUrl": "https://airtable.com/appc6csgkqrLMZWd4/tblG0fdNhtUY6osqd"
+        },
+        "filterByFormula": "{Status} = \"4k Standby\"",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        128,
+        -704
+      ],
+      "id": "72d4c827-d1e6-4f6c-b6ae-538abb2700de",
+      "name": "Search records",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "n1Mt5joq6FoBOBrd",
+          "name": "Token 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.response_url }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        208,
+        -896
+      ],
+      "id": "a36d5ad6-1a5f-46f1-9bfa-70cc7cb1c3f1",
+      "name": "Get Stitch",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "W0esa2eb0Uc5oMIS",
+          "name": "Fal AI"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "cd516266-c1df-4290-988f-45f9ea3cb5f7",
+                    "leftValue": "={{ $json.video.url }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "exists",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Success"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.error.message }}",
+                    "rightValue": "Request is still in progress",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "id": "0dc60b4d-7689-4877-8b0c-5c1a066a76f1"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "In progress"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        -80,
+        -688
+      ],
+      "id": "72ba7ec0-b3a1-463c-80be-b63afcbbed63",
+      "name": "Switch"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Get Videos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fal_Video": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Create Rows1": {
+      "main": [
+        [
+          {
+            "node": "Fal_Video",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Videos": {
+      "main": [
+        [
+          {
+            "node": "Update record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update record": {
+      "main": [
+        []
+      ]
+    },
+    "1080p Webhook": {
+      "main": [
+        [
+          {
+            "node": "Get Create Rows1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "4k Webhook": {
+      "main": [
+        [
+          {
+            "node": "Get Create Rows2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Create Rows2": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "Merge Videos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge Videos": {
+      "main": [
+        [
+          {
+            "node": "Wait1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait1": {
+      "main": [
+        [
+          {
+            "node": "Get Stitch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "4K Upscale": {
+      "main": [
+        [
+          {
+            "node": "Wait2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait2": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Search records": {
+      "main": [
+        [
+          {
+            "node": "Update record1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Stitch": {
+      "main": [
+        [
+          {
+            "node": "4K Upscale",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Search records",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "f3680faa-df71-4f8d-8262-ba5a2e51d250",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "858b0696cb7e4c2d54a791ff0d9e4a3cddc7a852434a593789da95c43379b467"
+  },
+  "id": "UYvbMPuJieYfqqZX",
+  "tags": []
+}

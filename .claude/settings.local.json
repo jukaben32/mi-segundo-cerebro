@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pip:*)",
+      "Read(//c/Program Files \\(x86\\)/**)",
+      "Read(//c//**)",
+      "Read(//c/Users/IA Power Engine/Desktop/TAO_WALLET/**)",
+      "Bash(\"C:/Users/IA Power Engine/Desktop/TAO_WALLET/tao_env/Scripts/python.exe\" -m pip install --upgrade pip)",
+      "Bash(\"C:/Users/IA Power Engine/Desktop/TAO_WALLET/tao_env/Scripts/python.exe\" -m pip install -r requirements.txt)",
+      "Bash(tao_env/Scripts/python.exe -m py_compile tao_monitor.py tao_alerts.py tao_deploy.py)"
+    ]
+  }
+}

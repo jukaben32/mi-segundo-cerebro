@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Moss&Mint Studio — Design & Web Agency</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="brand">
+        <span class="brand-glyph" aria-hidden="true"></span>
+        <span class="brand-name">Moss&Mint</span>
+      </div>
+      <nav class="main-nav">
+        <a href="#work">Work</a>
+        <a href="#services">Servcies</a>
+        <a href="#cases">Case Studies</a>
+      </nav>
+      <div class="header-cta">
+        <a class="btn btn-primary btn-small flashing" href="#contact">Conact us</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero -->
+    <section class="hero" id="work">
+      <div class="container hero-inner">
+        <div class="hero-copy">
+          <h1>We design & ship delightful products</h1>
+          <p class="hero-sub">
+            A boutique studio crafting <strong>brand systems</strong>, websites, and front‑end builds. Seamless (mostly), fast, and a bit obsessed with details.
+          </p>
+          <div class="cta-buttons">
+            <a class="btn btn-primary flashing" href="#contact">Get a Proposal</a>
+            <a class="btn btn-secondary" href="#portfolio">See our Work</a>
+          </div>
+        </div>
+        <div class="hero-visual">
+          <div class="hero-illustration">
+            <img class="hero-photo" src="https://images.pexels.com/photos/4348404/pexels-photo-4348404.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Creative studio working session"/>
+            <div class="mock-window">
+              <div class="mock-toolbar">
+                <span class="dot red"></span>
+                <span class="dot yellow"></span>
+                <span class="dot green"></span>
+                <span class="toolbar-title">Project Dashbord — Moss&Mint</span>
+              </div>
+              <div class="mock-body">
+                <div class="mock-card misaligned">
+                  <h3>Brand Palette</h3>
+                  <div class="swatches">
+                    <span class="swatch primary"></span>
+                    <span class="swatch accent off"></span>
+                    <span class="swatch neutral"></span>
+                  </div>
+                </div>
+                <div class="mock-card">
+                  <h3>Type Styles</h3>
+                  <p>Headings use Space Grotesk; body uses Inter. Kerning may be sligtly off.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Capabilities -->
+    <section class="features" id="services">
+      <div class="container">
+        <div class="section-head">
+          <h2 id="awesomeness-title" class="typewriter-text">Awesomeness</h2>
+          <p>Strategy → design → build. Less back‑and‑fourth, more flow.</p>
+        </div>
+        <div class="feature-grid">
+          <article class="feature-card">
+            <div class="icon icon-red-dot"></div>
+            <h3>Branding & Identity</h3>
+            <p>Logos, color, typography, and design systems for scale.</p>
+          </article>
+          <article class="feature-card bumped">
+            <div class="icon">🎨</div>
+            <h3>Web Design</h3>
+            <p>Marketing sites and product UI with components that actually componet.</p>
+          </article>
+          <article class="feature-card alt-accent">
+            <div class="icon">🧑‍💻</div>
+            <h3>Frontend Devlopment</h3>
+            <p>Accessible, performant, and maintainble builds your team can own.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Interactive Example (layout review) -->
+    <section class="example" id="portfolio">
+      <div class="container example-inner">
+        <div class="example-copy">
+          <h2>Layout review</h2>
+          <p>Toggle the card state or nudge the layout. Notice the odd paddings and the slightly off alignment (on purpose).</p>
+          <div class="example-controls">
+            <button id="bug-button" class="btn btn-primary">View example</button>
+            <button id="nudge-left" class="btn btn-ghost">Learn more</button>
+          </div>
+        </div>
+        <div class="example-visual">
+          <div class="example-card">
+            <img class="example-photo" src="https://images.pexels.com/photos/3153199/pexels-photo-3153199.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Team collaborating"/>
+            <h4 class="card-title">Case Study: River Co.</h4>
+            <div class="preview-row">
+              <span class="pill">status: In‑progres</span>
+              <span class="chip chip-green">on‑track</span>
+            </div>
+            <div class="preview-box weird-gap">
+              <div class="box-thing one"></div>
+              <div class="box-thing two"></div>
+              <div class="box-thing three misalign"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Packages -->
+    <section class="pricing" id="contact">
+      <div class="container">
+        <div class="section-head narrow">
+          <h2>Packages</h2>
+          <p>Transparent starting points. Every engagement is bespoke-ish.</p>
+        </div>
+        <div class="pricing-card">
+          <h3>Starter Website</h3>
+          <p class="price">$8,000+ <span>/ proj</span></p>
+          <ul class="list">
+            <li>3–5 pages</li>
+            <li>Basic CMS intergration</li>
+            <li>2 rounds of reviw</li>
+          </ul>
+          <a class="btn btn-primary skewed flashing" href="#contact">Request Proposel</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="foot-brand">© 2025 Moss&Mint Studio</div>
+      <nav class="foot-nav">
+        <a href="#faq">FAQ</a>
+        <a href="#privacy">Privcy</a>
+        <a href="#terms">Terms</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html> 

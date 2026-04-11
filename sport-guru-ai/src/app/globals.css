@@ -1,0 +1,25 @@
+@import "tailwindcss";
+
+@theme {
+  --color-background: #0A0A0B;
+  --color-foreground: #EDEDED;
+  --color-brand-dark: #121214;
+  --color-brand-accent-green: #22C55E;
+  --color-brand-accent-red: #EF4444;
+  --color-brand-gold: #D4AF37;
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+.glass-panel {
+  background: rgba(18, 18, 20, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}

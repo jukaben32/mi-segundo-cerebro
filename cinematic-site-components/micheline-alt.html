@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Micheline | Deluxe Edition</title>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,200..900;1,8..60,200..900&family=Inter:wght@100..900&family=Space+Mono&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <style>
+        :root {
+            /* Palette: Pink Predominant, Chocolate Gold Accent */
+            --micheline-pink: #FF007F;
+            --pink-soft: #FFF0F6;
+            --chocolate-gold: #7B5C3F;
+            --gold-bright: #D4AF37;
+            --bg: #FDFCFA;
+            --text-dark: #141413;
+            --text-muted: #5a5a5a;
+            --border: rgba(123, 92, 63, 0.15);
+            --r: 24px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            background: var(--bg); 
+            color: var(--text-dark); 
+            font-family: 'Inter', sans-serif; 
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ─── Navigation ─── */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 30px 60px;
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(253, 252, 251, 0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+        .logo {
+            font-family: 'Source Serif 4', serif;
+            font-size: 32px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+        .logo span { color: var(--micheline-pink); }
+        .nav-links {
+            display: flex;
+            gap: 40px;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+        }
+        .nav-links a { 
+            text-decoration: none; 
+            color: var(--text-dark); 
+            transition: color 0.3s;
+        }
+        .nav-links a:hover { color: var(--micheline-pink); }
+        
+        .menu-btn {
+            padding: 12px 28px;
+            background: transparent;
+            border: 1px solid var(--chocolate-gold);
+            border-radius: 100px;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--chocolate-gold);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .menu-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--micheline-pink);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: -1;
+        }
+        .menu-btn:hover { color: white; border-color: var(--micheline-pink); }
+        .menu-btn:hover::before { transform: scaleX(1); transform-origin: left; }
+
+        /* ─── Layout ─── */
+        section { padding: 140px 60px; max-width: 1440px; margin: 0 auto; }
+
+        /* ─── Hero ─── */
+        .hero {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 85vh;
+            align-items: center;
+            gap: 100px;
+        }
+        .hero-text { position: relative; }
+        .hero h1 {
+            font-family: 'Source Serif 4', serif;
+            font-size: clamp(56px, 10vw, 120px);
+            line-height: 0.9;
+            font-weight: 700;
+            letter-spacing: -0.05em;
+            margin-bottom: 30px;
+        }
+        .hero h1 .accent { 
+            color: var(--micheline-pink); 
+            text-shadow: 0 0 50px rgba(255, 0, 127, 0.15);
+        }
+        .hero h1 i { 
+            font-style: italic; 
+            font-weight: 300; 
+            color: var(--chocolate-gold);
+        }
+        .hero-tagline {
+            font-family: 'Source Serif 4', serif;
+            font-size: 22px;
+            font-style: italic;
+            color: var(--text-muted);
+            max-width: 380px;
+            line-height: 1.4;
+        }
+        .hero-right {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            justify-content: flex-end;
+            height: 100%;
+        }
+        
+        /* ─── Rituals (Services) ─── */
+        .rituals h2 {
+            font-family: 'Source Serif 4', serif;
+            font-size: 52px;
+            font-weight: 700;
+            margin-bottom: 80px;
+            letter-spacing: -0.03em;
+        }
+        .service-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+        .service-card {
+            background: white;
+            border-radius: var(--r);
+            overflow: hidden;
+            border: 1px solid var(--border);
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .service-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--micheline-pink);
+        }
+        .service-img {
+            height: 440px;
+            background-size: cover;
+            background-position: center;
+            transition: transform 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .service-card:hover .service-img { transform: scale(1.08); }
+        .service-info { padding: 32px; }
+        .service-info h3 {
+            font-family: 'Source Serif 4', serif;
+            font-size: 26px;
+            margin-bottom: 6px;
+            color: var(--chocolate-gold);
+        }
+        .service-info p {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--micheline-pink);
+        }
+
+        /* ─── Form Section (Booking) ─── */
+        .booking-section {
+            background: #141413;
+            color: white;
+            padding: 100px 60px;
+            margin: 0 60px 140px;
+            border-radius: 40px;
+            display: grid;
+            grid-template-columns: 0.8fr 1.2fr;
+            gap: 120px;
+            align-items: flex-start;
+        }
+        .booking-info h2 {
+            font-family: 'Source Serif 4', serif;
+            font-size: 64px;
+            letter-spacing: -0.04em;
+            margin-bottom: 24px;
+        }
+        .booking-info h2 span { color: var(--gold-bright); }
+        .booking-info p {
+            color: rgba(255,255,255,0.5);
+            font-size: 15px;
+            line-height: 1.6;
+            max-width: 320px;
+        }
+
+        .booking-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .form-group.full { grid-column: span 2; }
+        .form-group label {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: rgba(255,255,255,0.4);
+        }
+        .form-group input, .form-group select, .form-group textarea {
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            color: white;
+            padding: 12px 0;
+            font-family: 'Inter', sans-serif;
+            font-size: 15px;
+            outline: none;
+            transition: border-color 0.4s;
+        }
+        .form-group input:focus, .form-group select:focus {
+            border-color: var(--micheline-pink);
+        }
+        .submit-btn {
+            grid-column: span 2;
+            margin-top: 40px;
+            background: var(--micheline-pink);
+            color: white;
+            border: none;
+            padding: 20px;
+            border-radius: 100px;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            cursor: pointer;
+            transition: all 0.4s;
+        }
+        .submit-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 40px rgba(255, 0, 127, 0.4);
+        }
+
+        /* ─── Footer ─── */
+        footer {
+            padding: 80px 20px;
+            text-align: center;
+            border-top: 1px solid var(--border);
+        }
+        .footer-logo {
+            font-family: 'Source Serif 4', serif;
+            font-size: 80px;
+            opacity: 0.05;
+            margin-bottom: 20px;
+        }
+        .copy {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 9px;
+            color: var(--text-muted);
+            letter-spacing: 0.2em;
+        }
+
+        [data-reveal] { opacity: 0; transform: translateY(40px); }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">Micheline<span>.</span></div>
+        <div class="nav-links">
+            <a href="#servicios">Servicios</a>
+            <a href="#reserva">Reserva</a>
+            <a href="#">Contacto</a>
+        </div>
+        <div class="menu-btn">Reservar Cita</div>
+    </nav>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero" id="hero">
+            <div class="hero-text">
+                <h1 data-reveal>
+                    <span class="accent">Esencia</span><br>
+                    & <i>Obra Maestra</i>
+                </h1>
+                <p class="hero-tagline" data-reveal>Elevamos tu belleza a la categoría de arte.</p>
+            </div>
+            <div class="hero-right">
+                <!-- Espacio visual minimalista -->
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section class="rituals" id="servicios">
+            <h2 data-reveal>Nuestros Rituales</h2>
+            <div class="service-grid">
+                <div class="service-card" data-reveal>
+                    <div class="service-img" style="background-image: url('https://micheline-v2-beautera-w72i.vercel.app/img/pedi.png')"></div>
+                    <div class="service-info">
+                        <h3>Pedicura Artística</h3>
+                        <p>Ritual de precisión</p>
+                    </div>
+                </div>
+                <div class="service-card" data-reveal>
+                    <div class="service-img" style="background-image: url('https://micheline-v2-beautera-w72i.vercel.app/img/hair.png')"></div>
+                    <div class="service-info">
+                        <h3>Tratamiento Capilar</h3>
+                        <p>Brillo & Nutrición</p>
+                    </div>
+                </div>
+                <div class="service-card" data-reveal>
+                    <div class="service-img" style="background-image: url('https://micheline-v2-beautera-w72i.vercel.app/img/skin.png')"></div>
+                    <div class="service-info">
+                        <h3>Skin Therapy</h3>
+                        <p>Luz natural</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Booking Section (Form) -->
+        <div class="booking-section" id="reserva" data-reveal>
+            <div class="booking-info">
+                <h2>Crea tu <span>Propia Obra</span></h2>
+                <p>Agenda un ritual personalizado y deja que nuestros expertos cuiden de cada detalle.</p>
+            </div>
+            <form class="booking-form">
+                <div class="form-group">
+                    <label>Nombre</label>
+                    <input type="text" placeholder="Tu nombre">
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" placeholder="hola@ejemplo.com">
+                </div>
+                <div class="form-group">
+                    <label>Ritual</label>
+                    <select>
+                        <option>Pedicura Artística</option>
+                        <option>Tratamiento Capilar</option>
+                        <option>Skin Therapy</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Fecha</label>
+                    <input type="date">
+                </div>
+                <div class="form-group full">
+                    <label>Mensaje (Opcional)</label>
+                    <textarea rows="2" placeholder="Cualquier detalle especial..."></textarea>
+                </div>
+                <button type="submit" class="submit-btn">Agendar Ritual</button>
+            </form>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-logo">Micheline</div>
+        <div class="copy">© 2024 Micheline Beauty Lounge. Madrid.</div>
+    </footer>
+
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
+
+        // General fade-in reveal
+        document.querySelectorAll('[data-reveal]').forEach((el, index) => {
+            gsap.to(el, {
+                opacity: 1,
+                y: 0,
+                duration: 1.4,
+                ease: "power4.out",
+                delay: index * 0.1,
+                scrollTrigger: {
+                    trigger: el,
+                    start: "top 92%",
+                }
+            });
+        });
+
+        // Sticky Nav logic
+        ScrollTrigger.create({
+            trigger: "body",
+            start: "top top",
+            onUpdate: (self) => {
+                const nav = document.querySelector('nav');
+                if (self.direction === 1) { // Scrolling down
+                    gsap.to(nav, { y: -100, duration: 0.4 });
+                } else { // Scrolling up
+                    gsap.to(nav, { y: 0, duration: 0.4 });
+                }
+            }
+        });
+    </script>
+</body>
+</html>

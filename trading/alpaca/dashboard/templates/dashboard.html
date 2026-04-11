@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📈 Alpaca Trading Dashboard</title>
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --bg-card: #21262d;
+            --text-primary: #f0f6fc;
+            --text-secondary: #8b949e;
+            --accent-green: #3fb950;
+            --accent-red: #f85149;
+            --accent-blue: #58a6ff;
+            --border: #30363d;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, monospace;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .status-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: var(--bg-card);
+            border-radius: 20px;
+            font-size: 14px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent-green);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .card-title {
+            font-size: 14px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .card-value {
+            font-size: 32px;
+            font-weight: 700;
+        }
+
+        .card-value.positive { color: var(--accent-green); }
+        .card-value.negative { color: var(--accent-red); }
+
+        .card-change {
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .price-row:last-child { border-bottom: none; }
+
+        .symbol {
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .price {
+            font-family: 'Courier New', monospace;
+            font-size: 16px;
+        }
+
+        .change {
+            font-size: 14px;
+        }
+
+        .change.up { color: var(--accent-green); }
+        .change.down { color: var(--accent-red); }
+
+        .chart-container {
+            height: 300px;
+            margin-top: 20px;
+        }
+
+        .positions-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .positions-table th,
+        .positions-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .positions-table th {
+            color: var(--text-secondary);
+            font-weight: 500;
+            font-size: 12px;
+            text-transform: uppercase;
+        }
+
+        .trade-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 12px;
+            transition: all 0.2s;
+        }
+
+        .trade-btn.buy {
+            background: var(--accent-green);
+            color: white;
+        }
+
+        .trade-btn.sell {
+            background: var(--accent-red);
+            color: white;
+        }
+
+        .trade-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        .trade-history {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .trade-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 14px;
+        }
+
+        .trade-item .side {
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+
+        .trade-item .side.buy {
+            background: rgba(63, 185, 80, 0.2);
+            color: var(--accent-green);
+        }
+
+        .trade-item .side.sell {
+            background: rgba(248, 81, 73, 0.2);
+            color: var(--accent-red);
+        }
+
+        .risk-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .risk-item {
+            text-align: center;
+            padding: 15px;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+        }
+
+        .risk-item .label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 5px;
+        }
+
+        .risk-item .value {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .log-entry {
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            padding: 5px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .log-time {
+            color: var(--text-secondary);
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📈 Alpaca Trading Dashboard</h1>
+            <div class="status-badge">
+                <div class="status-dot"></div>
+                <span id="connection-status">Conectado</span>
+            </div>
+        </header>
+
+        <!-- Account Overview -->
+        <div class="grid">
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Valor Total</span>
+                </div>
+                <div class="card-value" id="total-value">$50,000.00</div>
+                <div class="card-change" id="day-pnl">+$0.00 (0.00%)</div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Cash Disponible</span>
+                </div>
+                <div class="card-value" id="cash-value">$25,000.00</div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Buying Power</span>
+                </div>
+                <div class="card-value" id="buying-power">$50,000.00</div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Risk Metrics</span>
+                </div>
+                <div class="risk-grid">
+                    <div class="risk-item">
+                        <div class="label">Drawdown</div>
+                        <div class="value" id="drawdown">0.00%</div>
+                    </div>
+                    <div class="risk-item">
+                        <div class="label">Sharpe</div>
+                        <div class="value" id="sharpe">0.00</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Prices & Chart -->
+        <div class="grid">
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Precios en Tiempo Real</span>
+                </div>
+                <div id="prices-container">
+                    <div class="price-row">
+                        <span class="symbol">TSLA</span>
+                        <div>
+                            <span class="price" id="tsla-price">$250.00</span>
+                            <span class="change up" id="tsla-change">+0.00%</span>
+                        </div>
+                    </div>
+                    <div class="price-row">
+                        <span class="symbol">SPY</span>
+                        <div>
+                            <span class="price" id="spy-price">$450.00</span>
+                            <span class="change up" id="spy-change">+0.00%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Equity Curve</span>
+                </div>
+                <div class="chart-container">
+                    <canvas id="equity-chart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Positions & Trades -->
+        <div class="grid">
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Posiciones Abiertas</span>
+                </div>
+                <table class="positions-table">
+                    <thead>
+                        <tr>
+                            <th>Símbolo</th>
+                            <th>Cantidad</th>
+                            <th>Promedio</th>
+                            <th>P&L</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody id="positions-body">
+                        <tr>
+                            <td colspan="5" style="text-align: center; color: var(--text-secondary);">
+                                Sin posiciones abiertas
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Trades Recientes</span>
+                </div>
+                <div class="trade-history" id="trade-history">
+                    <div style="text-align: center; color: var(--text-secondary); padding: 20px;">
+                        Sin trades recientes
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Activity Log -->
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title">Activity Log</span>
+            </div>
+            <div id="activity-log" style="max-height: 200px; overflow-y: auto;">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Conexión WebSocket
+        const socket = io('http://localhost:5000');
+
+        socket.on('connect', () => {
+            logActivity('Conectado al dashboard');
+            document.getElementById('connection-status').textContent = 'Conectado';
+            socket.emit('subscribe', { symbols: ['TSLA', 'SPY'] });
+        });
+
+        socket.on('disconnect', () => {
+            logActivity('Desconectado del dashboard');
+            document.getElementById('connection-status').textContent = 'Desconectado';
+        });
+
+        socket.on('market_update', (data) => {
+            updatePrices(data);
+            updateAccount(data.account);
+        });
+
+        socket.on('order_filled', (trade) => {
+            logActivity(`Orden ejecutada: ${trade.side} ${trade.quantity} ${trade.symbol} @ $${trade.price}`);
+            addTradeToHistory(trade);
+            fetchPositions();
+        });
+
+        // Chart.js setup
+        const ctx = document.getElementById('equity-chart').getContext('2d');
+        const equityChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'Equity',
+                    data: [],
+                    borderColor: '#3fb950',
+                    backgroundColor: 'rgba(63, 185, 80, 0.1)',
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 0,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { display: false },
+                    y: {
+                        grid: { color: '#30363d' },
+                        ticks: { color: '#8b949e' }
+                    }
+                },
+                animation: false,
+            }
+        });
+
+        // Actualizar precios
+        function updatePrices(data) {
+            if (data.TSLA) {
+                document.getElementById('tsla-price').textContent = `$${data.TSLA.price.toFixed(2)}`;
+                const changeEl = document.getElementById('tsla-change');
+                changeEl.textContent = `${data.TSLA.change >= 0 ? '+' : ''}${data.TSLA.change.toFixed(2)}%`;
+                changeEl.className = `change ${data.TSLA.change >= 0 ? 'up' : 'down'}`;
+            }
+            if (data.SPY) {
+                document.getElementById('spy-price').textContent = `$${data.SPY.price.toFixed(2)}`;
+                const changeEl = document.getElementById('spy-change');
+                changeEl.textContent = `${data.SPY.change >= 0 ? '+' : ''}${data.SPY.change.toFixed(2)}%`;
+                changeEl.className = `change ${data.SPY.change >= 0 ? 'up' : 'down'}`;
+            }
+
+            // Actualizar chart
+            const now = new Date(data.timestamp).toLocaleTimeString();
+            if (equityChart.data.labels.length > 50) {
+                equityChart.data.labels.shift();
+                equityChart.data.datasets[0].data.shift();
+            }
+            equityChart.data.labels.push(now);
+            equityChart.data.datasets[0].data.push(data.account.total_value);
+            equityChart.update('none');
+        }
+
+        // Actualizar cuenta
+        function updateAccount(account) {
+            document.getElementById('total-value').textContent = `$${account.total_value.toFixed(2)}`;
+            document.getElementById('cash-value').textContent = `$${account.cash.toFixed(2)}`;
+            document.getElementById('buying-power').textContent = `$${account.buying_power.toFixed(2)}`;
+
+            const pnlEl = document.getElementById('day-pnl');
+            pnlEl.textContent = `${account.day_pnl >= 0 ? '+' : ''}$${account.day_pnl.toFixed(2)} (${account.day_pnl_percent.toFixed(2)}%)`;
+            pnlEl.className = `card-change ${account.day_pnl >= 0 ? 'positive' : 'negative'}`;
+        }
+
+        // Fetch posiciones
+        async function fetchPositions() {
+            const res = await fetch('/api/positions');
+            const positions = await res.json();
+            const tbody = document.getElementById('positions-body');
+
+            if (positions.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: var(--text-secondary);">Sin posiciones abiertas</td></tr>';
+            } else {
+                tbody.innerHTML = positions.map(pos => `
+                    <tr>
+                        <td><strong>${pos.symbol}</strong></td>
+                        <td>${pos.quantity}</td>
+                        <td>$${pos.avg_cost.toFixed(2)}</td>
+                        <td class="${pos.unrealized_pnl >= 0 ? 'positive' : 'negative'}">
+                            $${pos.unrealized_pnl.toFixed(2)}
+                        </td>
+                        <td>
+                            <button class="trade-btn buy" onclick="quickTrade('${pos.symbol}', 'buy', 1)">BUY +1</button>
+                            <button class="trade-btn sell" onclick="quickTrade('${pos.symbol}', 'sell', 1)">SELL -1</button>
+                        </td>
+                    </tr>
+                `).join('');
+            }
+        }
+
+        // Trade rápido
+        function quickTrade(symbol, side, quantity) {
+            socket.emit(side, { symbol, quantity });
+        }
+
+        // Agregar trade al historial
+        function addTradeToHistory(trade) {
+            const history = document.getElementById('trade-history');
+            const time = new Date(trade.timestamp).toLocaleTimeString();
+
+            if (history.querySelector('div[style*="text-align: center"]')) {
+                history.innerHTML = '';
+            }
+
+            const tradeEl = document.createElement('div');
+            tradeEl.className = 'trade-item';
+            tradeEl.innerHTML = `
+                <div>
+                    <span class="side ${trade.side.toLowerCase()}">${trade.side}</span>
+                    <strong>${trade.symbol}</strong>
+                </div>
+                <div>
+                    ${trade.quantity} @ $${trade.price.toFixed(2)}
+                    <span style="color: var(--text-secondary); margin-left: 10px;">${time}</span>
+                </div>
+            `;
+            history.insertBefore(tradeEl, history.firstChild);
+        }
+
+        // Log de actividad
+        function logActivity(message) {
+            const log = document.getElementById('activity-log');
+            const time = new Date().toLocaleTimeString();
+
+            const entry = document.createElement('div');
+            entry.className = 'log-entry';
+            entry.innerHTML = `<span class="log-time">[${time}]</span>${message}`;
+
+            log.insertBefore(entry, log.firstChild);
+
+            // Mantener solo últimos 50 logs
+            while (log.children.length > 50) {
+                log.removeChild(log.lastChild);
+            }
+        }
+
+        // Polling de posiciones
+        setInterval(fetchPositions, 5000);
+
+        logActivity('Dashboard inicializado');
+    </script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+# Índice Detallado para .System_Configs
+
+1. **config.json** - Archivo principal de configuración.
+2. **setup.sh** - Script para la configuración inicial.
+3. **README.md** - Información general sobre las configuraciones usadas.
+
+*Este índice detalla el propósito de cada archivo en la carpeta .System_Configs.*

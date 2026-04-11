@@ -1,0 +1,4 @@
+# wiki/
+# Este directorio contiene el wiki generado y mantenido por el LLM.
+# SOLO el LLM escribe aquí. El humano solo lee.
+# Organizado en carpetas por tipo: concepts/, entities/, sources/, analyses/

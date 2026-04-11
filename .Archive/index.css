@@ -1,0 +1,205 @@
+:root {
+  --bg-dark: #0a0a0c;
+  --glass-bg: rgba(255, 255, 255, 0.03);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --accent-blue: #00d2ff;
+  --accent-purple: #9d50bb;
+  --accent-pink: #f000ff;
+  --text-main: #e0e0e0;
+  --text-muted: #a0a0a0;
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --card-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bg-dark);
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+  background-image: 
+    radial-gradient(circle at 10% 20%, rgba(157, 80, 187, 0.1) 0%, transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(0, 210, 255, 0.1) 0%, transparent 40%);
+  min-height: 100vh;
+}
+
+.glow-mesh {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4rem;
+  padding: 1rem 0;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: 800;
+  background: linear-gradient(to right, var(--accent-blue), var(--accent-purple));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.badge {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  color: var(--accent-blue);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.hero {
+  text-align: center;
+  margin-bottom: 5rem;
+  animation: fadeIn 1s ease-out;
+}
+
+h1 {
+  font-size: 4rem;
+  font-weight: 900;
+  margin-bottom: 1.5rem;
+  line-height: 1.1;
+  letter-spacing: -2px;
+}
+
+.hero p {
+  color: var(--text-muted);
+  font-size: 1.25rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border);
+  border-radius: 24px;
+  padding: 2.5rem;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--card-shadow);
+  cursor: pointer;
+}
+
+.card:hover {
+  transform: translateY(-10px);
+  border-color: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(to right, transparent, var(--accent-blue), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.6s ease;
+}
+
+.card:hover::before {
+  transform: translateX(100%);
+}
+
+.card-icon {
+  width: 48px;
+  height: 48px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2rem;
+  font-size: 1.5rem;
+  border: 1px solid var(--glass-border);
+}
+
+.card h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: #fff;
+}
+
+.card p {
+  color: var(--text-muted);
+  line-height: 1.6;
+  font-size: 0.95rem;
+  margin-bottom: 1.5rem;
+}
+
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.8rem;
+  color: var(--accent-blue);
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  background: #10b981;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 0.5rem;
+  box-shadow: 0 0 10px #10b981;
+}
+
+/* Custom Card Colors */
+#card-seo h3 { background: linear-gradient(to right, #00d2ff, #3a7bd5); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+#card-geo h3 { background: linear-gradient(to right, #10b981, #34d399); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+#card-marketing h3 { background: linear-gradient(to right, #f59e0b, #fbbf24); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+#card-sales h3 { background: linear-gradient(to right, #ef4444, #f87171); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+#card-uiux h3 { background: linear-gradient(to right, #8b5cf6, #d946ef); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+#card-bento h3 { background: linear-gradient(to right, #6366f1, #a855f7); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+#card-legal h3 { background: linear-gradient(to right, #6b7280, #9ca3af); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 768px) {
+  h1 { font-size: 2.5rem; }
+  .hero p { font-size: 1rem; }
+}

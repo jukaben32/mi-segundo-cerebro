@@ -1,0 +1,277 @@
+{
+  "name": "veo3",
+  "nodes": [
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://queue.fal.run/fal-ai/veo3",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Key"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "prompt",
+              "value": "={{ $json.text }}"
+            }
+          ]
+        },
+        "options": {
+          "batching": {
+            "batch": {
+              "batchSize": 1,
+              "batchInterval": 2000
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1480,
+        660
+      ],
+      "id": "7a60c721-4d17-4853-be30-b297e4b6fc13",
+      "name": "Create Video"
+    },
+    {
+      "parameters": {
+        "url": "=https://queue.fal.run/fal-ai/veo3/requests/{{ $json.request_id }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Key"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1220,
+        1020
+      ],
+      "id": "6cea189a-e35a-426b-afd1-38eb34afbf10",
+      "name": "Get Video"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Overview: {{ $json.Overview }}\n\nContext: {{ $json.Context }}\n\nAction: {{ $json.Action }}\n\nStyle: {{ $json.Style }}",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "You are an expert in creating text to video prompts. Give the user's inputs, generate a text to video prompt."
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        1120,
+        660
+      ],
+      "id": "f7360173-77e4-49d1-8f54-c1be8982710c",
+      "name": "Basic LLM Chain"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4.1-nano",
+          "mode": "list",
+          "cachedResultName": "gpt-4.1-nano"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        1180,
+        880
+      ],
+      "id": "93099fa0-2bea-4796-89e9-0629dd67a46f",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "HjO9JPYrLMoDERIs",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "formTitle": "Videosss",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Overview"
+            },
+            {
+              "fieldLabel": "Context"
+            },
+            {
+              "fieldLabel": "Action"
+            },
+            {
+              "fieldLabel": "Style"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [
+        940,
+        660
+      ],
+      "id": "8778b570-06be-456a-80f3-0424daea016a",
+      "name": "On form submission",
+      "webhookId": "dd4b3a19-d763-47b0-8941-8e0890a75ece"
+    },
+    {
+      "parameters": {
+        "sendTo": "hanneganc@gmail.com",
+        "subject": "Video",
+        "message": "={{ $json.video.url }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1500,
+        1020
+      ],
+      "id": "20953de9-358d-42fa-ab6e-554b39c2b826",
+      "name": "Gmail",
+      "webhookId": "9d7d61cc-fe15-4201-be66-7dc0fa3bed08",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "4OMwwWTJTJlFUi2X",
+          "name": "Gmail account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "# | n8n + Veo3 Skeleton \n\n## How It Works\n\n### - Create prompt via form\n### - Sends Prompt to Fal.AI\n### - Fal.AI generates video w/ Veo3\n### - Completed Video Link in emailed\n\n\n## Tools Needed\n\n### - OpenAI API key\n### - Fal.AI API key\n\n\n## Cost Per Video\n\n### - $6 per 8s video",
+        "height": 620,
+        "width": 420,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        460,
+        600
+      ],
+      "id": "289bdf30-fb3f-4f0c-9fa0-49a41f7e9e98",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        980,
+        1020
+      ],
+      "id": "566d79ff-83d1-41f5-85fd-3792ea843f2c",
+      "name": "Wait",
+      "webhookId": "0e319235-24c5-4eea-883f-dc67831f5ce1"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Create Video": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Video": {
+      "main": [
+        [
+          {
+            "node": "Gmail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain": {
+      "main": [
+        [
+          {
+            "node": "Create Video",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Get Video",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "9a60e7ae-72fe-407c-b355-4f9ac9fef256",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "df6cf1b4513c9af8b266d70dc0dd0afc5fc1f00598ab40f22fddd931457ec92d"
+  },
+  "id": "ANmV8y5ERoKRiCvv",
+  "tags": []
+}
