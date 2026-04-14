@@ -7,7 +7,16 @@
       "Read(//c/Users/IA Power Engine/Desktop/TAO_WALLET/**)",
       "Bash(\"C:/Users/IA Power Engine/Desktop/TAO_WALLET/tao_env/Scripts/python.exe\" -m pip install --upgrade pip)",
       "Bash(\"C:/Users/IA Power Engine/Desktop/TAO_WALLET/tao_env/Scripts/python.exe\" -m pip install -r requirements.txt)",
-      "Bash(tao_env/Scripts/python.exe -m py_compile tao_monitor.py tao_alerts.py tao_deploy.py)"
+      "Bash(tao_env/Scripts/python.exe -m py_compile tao_monitor.py tao_alerts.py tao_deploy.py)",
+      "Bash(npm install:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(cd /C/Users/IA Power Engine/.gemini/antigravity/scratch/MisProyectos/sport-guru-ai)",
+      "Bash(npm list:*)",
+      "Bash(npm audit:*)",
+      "Bash(npm view:*)",
+      "Bash(npm uninstall:*)",
+      "WebFetch(domain:micheline-v2-beautera-51nh-git-main-juans-projects-0e0054fc.vercel.app)"
     ]
   }
 }
