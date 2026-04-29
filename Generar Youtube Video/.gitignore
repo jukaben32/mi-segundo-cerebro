@@ -1,0 +1,10 @@
+# Ignorar archivos generados y credenciales
+log.txt
+token.pickle
+client_secrets.json
+video_final.mp4
+audio_generado.mp3
+imagen_generada.png
+guion.txt
+subtitulos.srt
+__pycache__/

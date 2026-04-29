@@ -1,0 +1,32 @@
+:root {
+  --primary: #6366f1;
+  --accent: #a78bfa;
+  --bg: #0b0b14;
+  --bg-darker: #050510;
+  --text: #e5e7eb;
+  --text-muted: #9ca3af;
+  --font-main: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: var(--font-main);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+canvas {
+  display: block;
+}
+
+/* Smooth Scroll Utility */
+html {
+  scroll-behavior: smooth;
+}

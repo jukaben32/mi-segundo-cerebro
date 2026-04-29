@@ -7,7 +7,9 @@ metadata:
 
 ## When to use
 
-Use this skills whenever you are dealing with Remotion code to obtain the domain-specific knowledge.
+Use this skill whenever you are dealing with Remotion code to obtain the domain-specific knowledge.
+
+**Complementary resource:** Always load `MisProyectos/remotion-claude-md/Remotion Claude.MD` first for foundational rules (project structure, hooks, core components, animation primitives). This skill provides **advanced domain-specific rules** that extend those foundations.
 
 ## Captions
 

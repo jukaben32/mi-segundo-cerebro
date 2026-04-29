@@ -9,7 +9,28 @@ Transform a basic or existing website into a high-end, premium, and "cinematic" 
 
 ---
 
-## 🛠 THE 4-STEP PIPELINE
+## 🛠 THE PIPELINES
+
+You have two modes of operation: **Standard** (Vanilla HTML) and **Elite** (Vite + React + GSAP).
+
+---
+
+## ⚡ ELITE WORKFLOW (The "Claude Design" Methodology)
+**Goal**: Build a high-performance, interactive journey using the `elite-template`.
+
+1. **Inspiration**: Use [motions.ai](https://motions.ai) or similar to find a reference movement.
+2. **Asset Generation**: Use AI (Seedance/Kling) to generate a 3-5 second hero loop.
+3. **Frame Extraction**: Extract 60-120 frames (WebP) from the video for the scroll-scrubber.
+4. **Scaffold**: Initialize the `elite-template` project.
+5. **Component Build**:
+   - `ScrollVideoBackground`: Map the extracted frames to scroll.
+   - `SlidePanel`: Implement 3D cards that slide up and tilt on mouse-move.
+   - `ScrollFloat`: Add the hero headline with character-fade animation.
+6. **Deploy**: Deploy to Vercel.
+
+---
+
+## 🏗️ THE 4-STEP PIPELINE (Standard Mode)
 
 ### 1. Brand Analysis 🔍
 **Goal**: Deeply understand the current brand to extract the "soul" of the company.
@@ -56,7 +77,14 @@ Transform a basic or existing website into a high-end, premium, and "cinematic" 
 ---
 
 ## 📚 COMPONENT REFERENCE
-The library at `c:\Users\hp\MisProyectos\cinematic-site-components` contains over 30 standalone modules. Use them as reference for Step 3.
+The library at `c:\Users\IA Power Engine\.gemini\antigravity\scratch\MisProyectos\cinematic-site-components` contains over 30 standalone modules.
+
+### Elite Template (React/Vite)
+- `elite-template/`: The full scaffold for interactive scroll journeys.
+- `elite-template/src/components/ScrollVideoBackground.jsx`: The frame-scrubbing engine.
+- `elite-template/src/components/SlidePanel.jsx`: 3D interactive panels.
+
+### Vanilla Modules
 - `index.html`: The visual hub of all modules.
 - `accordion-slider.html`: Expanding image panels.
 - `text-mask.html`: Headline fills on scroll.

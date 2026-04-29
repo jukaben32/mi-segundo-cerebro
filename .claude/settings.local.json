@@ -16,7 +16,17 @@
       "Bash(npm audit:*)",
       "Bash(npm view:*)",
       "Bash(npm uninstall:*)",
-      "WebFetch(domain:micheline-v2-beautera-51nh-git-main-juans-projects-0e0054fc.vercel.app)"
+      "WebFetch(domain:micheline-v2-beautera-51nh-git-main-juans-projects-0e0054fc.vercel.app)",
+      "Bash(ls:*)",
+      "Bash(set PYTHONIOENCODING=utf-8)",
+      "Bash(python scripts/run.py auth_manager.py status)",
+      "Bash(export LC_ALL=en_US.UTF-8)",
+      "Bash(export PYTHONIOENCODING=utf-8)",
+      "Bash(.venv/Scripts/python.exe scripts/auth_manager.py status)",
+      "Bash(.venv/Scripts/python.exe scripts/auth_manager.py setup)",
+      "Bash(.venv/Scripts/python.exe -X utf8 scripts/run.py ask_question.py --question \"con estas informaciones me gustaria que me crearas una automatizacion de como crear videos faceless en la cual se sigan los procesos aca mostrados por este cuaderno\")",
+      "Bash(npx remotion *)",
+      "Bash(git clone *)"
     ]
   }
 }

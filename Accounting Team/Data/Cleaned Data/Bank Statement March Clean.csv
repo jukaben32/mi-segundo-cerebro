@@ -1,0 +1,36 @@
+date,description,debit,credit,balance,status
+2026-03-01,Westfield Commercial Properties - Rent,3200.00,,42030.00,clean
+2026-03-01,Shopify Inc - Monthly Subscription,79.00,,41951.00,clean
+2026-03-04,ATM Cash Withdrawal,500.00,,41451.00,clean
+2026-03-03,Amazon Seller Payout,,18450.00,59901.00,clean
+2026-03-03,TechSource Distributors - INV-TS-4521,8750.00,,51151.00,clean
+2026-03-05,FedEx Shipping Services,1230.45,,49920.55,clean
+2026-03-05,Google Ads - Campaign CPC,650.00,,49270.55,clean
+2026-03-07,eBay Managed Payments,,5890.00,55160.55,clean
+2026-03-07,UPS Freight Charges,980.00,,54180.55,clean
+2026-03-08,Shopify Payout - Direct Sales,,3200.00,57380.55,clean
+2026-03-10,ADP Payroll Services - Biweekly,15400.00,,41980.55,clean
+2026-03-10,Austin Energy - Electric Utility,420.35,,41560.20,clean
+2026-03-11,AT&T Business Services,189.99,,41370.21,clean
+2026-03-12,Summit Electronics Inc - INV-SE-0892,5200.00,,36170.21,clean
+2026-03-13,Staples Inc,154.60,,36015.61,review_amount_mismatch
+2026-03-14,Amazon Seller Payout,,15830.00,51845.61,review_amount_mismatch
+2026-03-14,Meta Platforms - Advertising,800.00,,51045.61,clean
+2026-03-15,State Farm Insurance - Commercial Policy,560.00,,50485.61,clean
+2026-03-16,Shopify Payout - Direct Sales,,2800.00,53285.61,clean
+2026-03-17,FedEx Shipping Services,890.00,,52395.61,clean
+2026-03-18,City of Austin - Water Utility,95.20,,52300.41,clean
+2026-03-19,Pacific Components Inc - INV-PC-3310,3400.00,,48900.41,clean
+2026-03-20,eBay Managed Payments,,4760.00,53660.41,clean
+2026-03-21,Intuit QuickBooks - Subscription,45.00,,53615.41,clean
+2026-03-22,Amazon Seller Payout,,21200.00,74815.41,clean
+2026-03-23,MISC ONLINE SVC,75.00,,74740.41,review_unidentified
+2026-03-24,UPS Freight Charges,1100.00,,73640.41,clean
+2026-03-25,ADP Payroll Services - Biweekly,15400.00,,58240.41,clean
+2026-03-25,Shopify Payout - Direct Sales,,4100.00,62340.41,clean
+2026-03-26,Google Ads - Campaign CPC,720.00,,61620.41,clean
+2026-03-27,Office Depot - Supplies,210.30,,61410.11,clean
+2026-03-28,TechSource Distributors - INV-TS-4587,6100.00,,55310.11,clean
+2026-03-29,Amazon Seller Payout,,14340.00,69650.11,clean
+2026-03-30,FedEx Shipping Services,670.00,,68980.11,clean
+2026-03-31,Meta Platforms - Advertising,550.00,,68430.11,clean

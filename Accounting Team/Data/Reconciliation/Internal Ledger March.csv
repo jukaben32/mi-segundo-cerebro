@@ -1,0 +1,35 @@
+entry_id,date,description,debit,credit,account,reference,recorded_by
+LED-0301-001,2026-03-01,Rent - Westfield Commercial Properties,3200.00,,Rent Expense,,Maria Santos
+LED-0301-002,2026-03-01,Shopify subscription,79.00,,Software Expense,,Maria Santos
+LED-0303-001,2026-03-03,Amazon marketplace revenue,,18450.00,Sales Revenue,AZ-90281,Auto-import
+LED-0303-002,2026-03-03,Inventory purchase - TechSource Distributors,8750.00,,Inventory / COGS,INV-TS-4521,Maria Santos
+LED-0304-001,2026-03-04,Petty cash withdrawal,500.00,,Petty Cash,,James Rivera
+LED-0305-001,2026-03-05,Shipping - FedEx,1230.45,,Shipping Expense,TRK-789456123,Maria Santos
+LED-0305-002,2026-03-05,Google Ads campaign,650.00,,Marketing Expense,,Maria Santos
+LED-0307-001,2026-03-07,eBay marketplace revenue,,5890.00,Sales Revenue,EB-44120,Auto-import
+LED-0307-002,2026-03-07,Freight - UPS,980.00,,Shipping Expense,TRK-112233445,Maria Santos
+LED-0308-001,2026-03-08,Shopify direct sales revenue,,3200.00,Sales Revenue,,Auto-import
+LED-0310-001,2026-03-10,Payroll - biweekly,15400.00,,Payroll Expense,,ADP Auto
+LED-0310-002,2026-03-10,Electric utility - Austin Energy,420.35,,Utilities Expense,,Maria Santos
+LED-0311-001,2026-03-11,Internet/phone - AT&T,189.99,,Utilities Expense,,Maria Santos
+LED-0312-001,2026-03-12,Inventory purchase - Summit Electronics,5200.00,,Inventory / COGS,INV-SE-0892,Maria Santos
+LED-0313-001,2026-03-13,Office supplies - Staples,145.60,,Office Supplies,,Maria Santos
+LED-0314-001,2026-03-14,Amazon marketplace revenue,,15870.00,Sales Revenue,AZ-90347,Auto-import
+LED-0314-002,2026-03-14,Meta advertising,800.00,,Marketing Expense,,Maria Santos
+LED-0315-001,2026-03-15,Insurance - State Farm,560.00,,Insurance Expense,,Maria Santos
+LED-0316-001,2026-03-16,Shopify direct sales revenue,,2800.00,Sales Revenue,,Auto-import
+LED-0317-001,2026-03-17,Shipping - FedEx,890.00,,Shipping Expense,TRK-789456789,Maria Santos
+LED-0318-001,2026-03-18,Water utility - City of Austin,95.20,,Utilities Expense,,Maria Santos
+LED-0319-001,2026-03-19,Inventory purchase - Pacific Components,3400.00,,Inventory / COGS,INV-PC-3310,Maria Santos
+LED-0320-001,2026-03-20,eBay marketplace revenue,,4760.00,Sales Revenue,EB-44298,Auto-import
+LED-0321-001,2026-03-21,QuickBooks subscription,45.00,,Software Expense,,Maria Santos
+LED-0322-001,2026-03-22,Amazon marketplace revenue,,21200.00,Sales Revenue,AZ-90412,Auto-import
+LED-0324-001,2026-03-24,Freight - UPS,1100.00,,Shipping Expense,TRK-556677889,Maria Santos
+LED-0325-001,2026-03-25,Payroll - biweekly,15400.00,,Payroll Expense,,ADP Auto
+LED-0325-002,2026-03-25,Shopify direct sales revenue,,4100.00,Sales Revenue,,Auto-import
+LED-0326-001,2026-03-26,Google Ads campaign,720.00,,Marketing Expense,,Maria Santos
+LED-0327-001,2026-03-27,Office supplies - Office Depot,210.30,,Office Supplies,STR-20145,Maria Santos
+LED-0328-001,2026-03-28,Inventory purchase - TechSource Distributors,6100.00,,Inventory / COGS,INV-TS-4587,Maria Santos
+LED-0329-001,2026-03-29,Amazon marketplace revenue,,14340.00,Sales Revenue,AZ-90503,Auto-import
+LED-0330-001,2026-03-30,Shipping - FedEx,670.00,,Shipping Expense,TRK-321654987,Maria Santos
+LED-0331-001,2026-03-31,Meta advertising,550.00,,Marketing Expense,,Maria Santos
