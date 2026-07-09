@@ -1,0 +1,39 @@
+# .gitignore para vault de conocimiento (Obsidian / segundo cerebro)
+# Excluir caches de herramientas de IA y datos regenerables (no contenido propio)
+
+# Agentes / herramientas de IA (caches pesados)
+.agents/
+.roo/
+.windsurf/
+.trae/
+.continue/
+.autoresearch/
+.Archive/
+
+# Obsidian workspace state (no sincronizar)
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+.obsidian/cache/
+
+# Python
+__pycache__/
+.venv/
+venv/
+*.pyc
+
+# Node
+node_modules/
+
+# Modelos / datos pesados de IA
+*.bin
+*.gguf
+models/
+LightRAG/
+MinerU/
+prompts.chat/
+
+# Logs / temporales
+*.log
+*.tmp
+.DS_Store
+Thumbs.db
